@@ -1,0 +1,11 @@
+.{
+    .name = "boringssl",
+    .version = "0.20241203.0",
+    .paths = .{"."},
+    .dependencies = .{
+        .boringssl = .{
+            .url = "https://github.com/google/boringssl/archive/2635bedc5d12407e4e78f2250d9c8c534954e045.tar.gz",
+            .hash = "12201cad8e77deaaa1702718e70346a30f4b54d169e9152a696621d098edb093d4f3",
+        },
+    },
+}
