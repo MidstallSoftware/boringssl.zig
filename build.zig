@@ -93,6 +93,27 @@ pub fn build(b: *std.Build) void {
     });
 
     libcrypto.addCSourceFiles(.{
+        .root = boringssl_dep.path("crypto"),
+        .files = &.{
+            "curve25519/asm/x25519-asm-arm.S",
+            "hrss/asm/poly_rq_mul.S",
+            "poly1305/poly1305_arm_asm.S",
+        },
+        .flags = cflags,
+    });
+
+    libcrypto.addCSourceFiles(.{
+        .root = boringssl_dep.path("third_party/fiat/asm"),
+        .files = &.{
+            "fiat_curve25519_adx_mul.S",
+            "fiat_curve25519_adx_square.S",
+            "fiat_p256_adx_mul.S",
+            "fiat_p256_adx_sqr.S",
+        },
+        .flags = cflags,
+    });
+
+    libcrypto.addCSourceFiles(.{
         .root = boringssl_dep.path("gen/crypto"),
         .files = collectSources(b, boringssl_dep.path("gen/crypto"), &.{"S"}, false, true),
         .flags = cflags,
