@@ -107,6 +107,27 @@ pub fn build(b: *std.Build) void {
     libcrypto.installHeadersDirectory(boringssl_dep.path("include/openssl"), "openssl", .{});
     b.installArtifact(libcrypto);
 
+    const libdecrepit = std.Build.Step.Compile.create(b, .{
+        .name = "decrepit",
+        .root_module = .{
+            .target = target,
+            .optimize = optimize,
+            .link_libcpp = true,
+        },
+        .kind = .lib,
+        .linkage = linkage,
+    });
+
+    libdecrepit.addCSourceFiles(.{
+        .root = boringssl_dep.path("decrepit"),
+        .files = collectSources(b, boringssl_dep.path("decrepit"), &.{"cc"}, false, true),
+        .flags = cflags,
+    });
+
+    libdecrepit.addIncludePath(boringssl_dep.path("include"));
+    libdecrepit.installHeadersDirectory(boringssl_dep.path("include/openssl"), "openssl", .{});
+    b.installArtifact(libdecrepit);
+
     const libssl = std.Build.Step.Compile.create(b, .{
         .name = "ssl",
         .root_module = .{
